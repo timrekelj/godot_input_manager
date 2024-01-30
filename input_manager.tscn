@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://doc0fni6efhef"]
+
+[ext_resource type="Script" path="res://InputManager.gd" id="1_sag1o"]
+
+[node name="InputManager" type="Node"]
+script = ExtResource("1_sag1o")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]

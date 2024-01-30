@@ -1,0 +1,97 @@
+[gd_scene load_steps=14 format=3 uid="uid://dsstwvwlnhjoi"]
+
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3D.gd" id="1_x8i2g"]
+[ext_resource type="Script" path="res://ball.gd" id="1_xfdr6"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="2_bdfv3"]
+[ext_resource type="PackedScene" uid="uid://doc0fni6efhef" path="res://input_manager.tscn" id="3_k4okl"]
+[ext_resource type="Script" path="res://Label.gd" id="5_nyf56"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_pbjl1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0olhu"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_lufmf"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_lpdu6"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0x28k"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b3fkg"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_akmdv"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3nppl"]
+size = Vector3(10, 1, 10)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="box" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.61639, 0.784558, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="box"]
+mesh = SubResource("BoxMesh_pbjl1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="box"]
+shape = SubResource("BoxShape3D_0olhu")
+
+[node name="ball" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.54599, 0.784558, -1.05018)
+script = ExtResource("1_xfdr6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ball"]
+mesh = SubResource("SphereMesh_lufmf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ball"]
+shape = SubResource("SphereShape3D_lpdu6")
+
+[node name="capsule" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.40978, 0.784558, -5.31718)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="capsule"]
+mesh = SubResource("CapsuleMesh_0x28k")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="capsule"]
+shape = SubResource("CapsuleShape3D_b3fkg")
+
+[node name="floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.887684, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="floor"]
+mesh = SubResource("BoxMesh_akmdv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+shape = SubResource("BoxShape3D_3nppl")
+
+[node name="PhantomCamera3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.888865, 0.458169, 0, -0.458169, 0.888865, 0, 1.99185, 3.27477)
+script = ExtResource("1_x8i2g")
+priority_override = false
+priority = 0
+follow_mode = 0
+look_at_mode = 0
+tween_parameters = null
+tween_on_load = false
+inactive_update_mode = 0
+camera_3D_resource = null
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.888865, 0.458169, 0, -0.458169, 0.888865, 0, 1.99185, 3.27477)
+
+[node name="PhantomCameraHost" type="Node" parent="Camera3D"]
+script = ExtResource("2_bdfv3")
+
+[node name="InputManager" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("3_k4okl")]
+camera = NodePath("../Camera3D")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0)
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("5_nyf56")
+
+[connection signal="left_click_pressed" from="InputManager" to="ball" method="_on_input_manager_left_click_pressed"]
+[connection signal="raycast_sent" from="InputManager" to="Label" method="_on_input_manager_raycast_sent"]
+[connection signal="right_click_pressed" from="InputManager" to="ball" method="_on_input_manager_right_click_pressed"]
