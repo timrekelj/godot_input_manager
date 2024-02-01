@@ -1,8 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://dsstwvwlnhjoi"]
+[gd_scene load_steps=16 format=3 uid="uid://dsstwvwlnhjoi"]
 
+[ext_resource type="Script" path="res://box.gd" id="1_s2qv6"]
 [ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3D.gd" id="1_x8i2g"]
 [ext_resource type="Script" path="res://ball.gd" id="1_xfdr6"]
 [ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="2_bdfv3"]
+[ext_resource type="Script" path="res://capsule.gd" id="2_w8vhs"]
 [ext_resource type="PackedScene" uid="uid://doc0fni6efhef" path="res://input_manager.tscn" id="3_k4okl"]
 [ext_resource type="Script" path="res://Label.gd" id="5_nyf56"]
 
@@ -26,8 +28,9 @@ size = Vector3(10, 1, 10)
 
 [node name="Node3D" type="Node3D"]
 
-[node name="box" type="StaticBody3D" parent="."]
+[node name="box" type="StaticBody3D" parent="." groups=["Interactables"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.61639, 0.784558, 0)
+script = ExtResource("1_s2qv6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="box"]
 mesh = SubResource("BoxMesh_pbjl1")
@@ -35,8 +38,8 @@ mesh = SubResource("BoxMesh_pbjl1")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="box"]
 shape = SubResource("BoxShape3D_0olhu")
 
-[node name="ball" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.54599, 0.784558, -1.05018)
+[node name="ball" type="StaticBody3D" parent="." groups=["Interactables"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.81537, 0.784558, -1.05018)
 script = ExtResource("1_xfdr6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ball"]
@@ -45,8 +48,9 @@ mesh = SubResource("SphereMesh_lufmf")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ball"]
 shape = SubResource("SphereShape3D_lpdu6")
 
-[node name="capsule" type="StaticBody3D" parent="."]
+[node name="capsule" type="StaticBody3D" parent="." groups=["Interactables"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.40978, 0.784558, -5.31718)
+script = ExtResource("2_w8vhs")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="capsule"]
 mesh = SubResource("CapsuleMesh_0x28k")
@@ -93,5 +97,6 @@ offset_bottom = 23.0
 script = ExtResource("5_nyf56")
 
 [connection signal="left_click_pressed" from="InputManager" to="ball" method="_on_input_manager_left_click_pressed"]
-[connection signal="raycast_sent" from="InputManager" to="Label" method="_on_input_manager_raycast_sent"]
+[connection signal="raycast_enter" from="InputManager" to="Label" method="_on_input_manager_raycast_enter"]
+[connection signal="raycast_leave" from="InputManager" to="Label" method="_on_input_manager_raycast_leave"]
 [connection signal="right_click_pressed" from="InputManager" to="ball" method="_on_input_manager_right_click_pressed"]
